@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#252526">
+  <meta name="theme-color" content="#242426">
   <title>XanOS Desktop</title>
   <link rel="stylesheet" href="desktop.css">
   <script src="desktop.js" defer></script>
@@ -12,14 +12,12 @@
   <main class="desktop" aria-label="XanOS desktop"></main>
 
   <footer class="taskbar">
-    <button class="start-button" type="button" aria-label="Start menu" title="Start">
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M2 3.5 10.5 2v9H2V3.5Zm10 8V1.8L22 0v11.5h-10ZM2 12.5h8.5v9L2 20v-7.5Zm10 0h10V24l-10-1.8V12.5Z" fill="currentColor"/>
-      </svg>
+    <button class="start-button" type="button" aria-label="XanOS Start" title="XanOS">
+      <img src="RootIcons/Xanossmall.png" alt="XanOS" class="os-logo">
     </button>
     <div class="taskbar-space"></div>
     <div class="system-tray">
-      <span id="clock" class="clock" aria-label="Current time">--:--</span>
+      <span id="clock" class="clock" aria-label="Current local time" aria-live="off">--:--</span>
     </div>
   </footer>
 </body>
