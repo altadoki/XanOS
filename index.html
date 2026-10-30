@@ -3,13 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="refresh" content="0; url=desktop.html">
-  <title>XanOS</title>
-  <script>
-    window.location.replace("desktop.html");
-  </script>
+  <meta name="theme-color" content="#242426">
+  <title>XanOS Desktop</title>
+  <link rel="stylesheet" href="desktop.css?v=2">
+  <script src="desktop.js?v=2" defer></script>
 </head>
 <body>
-  <p>Starting XanOS… <a href="desktop.html">Continue to desktop</a></p>
+  <main class="desktop" aria-label="XanOS desktop"></main>
+  <section class="start-menu" id="startMenu" aria-label="Start menu" aria-hidden="true"><div class="start-menu-inner"></div></section>
+  <footer class="taskbar">
+    <button class="start-button" id="startButton" type="button" aria-label="XanOS Start" title="XanOS" aria-expanded="false" aria-controls="startMenu"><img src="RootIcons/Xanossmall.png" alt="" class="os-logo"></button>
+    <div class="taskbar-space"></div>
+    <div class="system-tray"><span id="clock" class="clock" aria-label="Current local time" aria-live="off">--:--</span></div>
+  </footer>
+  <div class="local-cursor" id="localCursor" aria-hidden="true" data-kind="default"><span class="cursor-arrow"></span><span class="cursor-text"></span><span class="cursor-hand"></span></div>
 </body>
 </html>
