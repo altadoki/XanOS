@@ -11,14 +11,22 @@
 <body>
   <main class="desktop" aria-label="XanOS desktop"></main>
 
+  <section class="start-menu" id="startMenu" aria-label="Start menu" aria-hidden="true"></section>
+
   <footer class="taskbar">
-    <button class="start-button" type="button" aria-label="XanOS Start" title="XanOS">
-      <img src="RootIcons/Xanossmall.png" alt="XanOS" class="os-logo">
+    <button class="start-button" id="startButton" type="button" aria-label="XanOS Start" title="XanOS" aria-expanded="false" aria-controls="startMenu">
+      <img src="RootIcons/Xanossmall.png" alt="" class="os-logo">
     </button>
     <div class="taskbar-space"></div>
     <div class="system-tray">
       <span id="clock" class="clock" aria-label="Current local time" aria-live="off">--:--</span>
     </div>
   </footer>
+
+  <div class="local-cursor" id="localCursor" aria-hidden="true">
+    <span class="cursor-arrow"></span>
+    <span class="cursor-text"></span>
+    <span class="cursor-hand"></span>
+  </div>
 </body>
 </html>
