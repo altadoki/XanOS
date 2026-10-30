@@ -38,13 +38,15 @@ function startLocalCursor() {
     }
 
     const target = document.elementFromPoint(pointerX, pointerY);
-    const style = target ? window.getComputedStyle(target) : null;
-    const cursorType = style ? style.cursor : "default";
-
     let kind = "default";
-    if (cursorType === "text" || cursorType === "vertical-text") kind = "text";
-    else if (cursorType === "pointer") kind = "pointer";
-    else if (cursorType === "grab" || cursorType === "grabbing") kind = "grab";
+
+    if (target && target.closest("input, textarea, [contenteditable='true'], [role='textbox']")) {
+      kind = "text";
+    } else if (target && target.closest("button, a, [role='button'], select, label, summary")) {
+      kind = "pointer";
+    } else if (target && target.closest("[draggable='true']")) {
+      kind = "grab";
+    }
 
     cursor.dataset.kind = kind;
   }
