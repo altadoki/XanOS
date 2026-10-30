@@ -11,6 +11,7 @@
 
 * {
   box-sizing: border-box;
+  cursor: none !important;
 }
 
 html,
@@ -42,6 +43,7 @@ body {
   background: #19191b;
   border-top: 1px solid rgba(255, 255, 255, 0.04);
   user-select: none;
+  z-index: 20;
 }
 
 .start-button {
@@ -52,7 +54,6 @@ body {
   padding: 0;
   background: transparent;
   border: 0;
-  cursor: pointer;
   transition: background 120ms ease;
 }
 
@@ -92,6 +93,99 @@ body {
   font-variant-numeric: tabular-nums;
 }
 
+.start-menu {
+  position: fixed;
+  z-index: 15;
+  left: 8px;
+  bottom: 56px;
+  width: min(340px, calc(100vw - 16px));
+  height: min(420px, calc(100vh - 72px));
+  background: #202023;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.42);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px) scale(0.985);
+  transform-origin: bottom left;
+  transition: opacity 140ms ease, transform 140ms ease, visibility 140ms;
+}
+
+.start-menu.open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
+.local-cursor {
+  position: fixed;
+  z-index: 9999;
+  top: 0;
+  left: 0;
+  width: 24px;
+  height: 30px;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate3d(-100px, -100px, 0);
+  will-change: transform;
+}
+
+.local-cursor.visible {
+  opacity: 1;
+}
+
+.cursor-arrow {
+  position: absolute;
+  inset: 0;
+  width: 20px;
+  height: 27px;
+  background: #111;
+  clip-path: polygon(0 0, 0 100%, 28% 75%, 45% 100%, 58% 94%, 42% 69%, 78% 67%);
+}
+
+.cursor-arrow::after {
+  content: "";
+  position: absolute;
+  inset: 1.5px;
+  background: #fff;
+  clip-path: polygon(0 0, 0 100%, 28% 75%, 45% 100%, 58% 94%, 42% 69%, 78% 67%);
+}
+
+.local-cursor[data-kind="text"] .cursor-arrow,
+.local-cursor[data-kind="pointer"] .cursor-arrow,
+.local-cursor[data-kind="grab"] .cursor-arrow {
+  display: none;
+}
+
+.cursor-text,
+.cursor-hand {
+  display: none;
+  position: absolute;
+}
+
+.local-cursor[data-kind="text"] .cursor-text {
+  display: block;
+  top: 2px;
+  left: 8px;
+  width: 2px;
+  height: 23px;
+  background: #fff;
+  box-shadow: 0 0 0 1px #111;
+}
+
+.local-cursor[data-kind="pointer"] .cursor-hand,
+.local-cursor[data-kind="grab"] .cursor-hand {
+  display: block;
+  top: 1px;
+  left: 5px;
+  width: 17px;
+  height: 25px;
+  background: #fff;
+  border: 1.5px solid #111;
+  border-radius: 8px 8px 5px 5px;
+  clip-path: polygon(25% 100%, 12% 54%, 0 43%, 0 29%, 15% 24%, 30% 37%, 30% 4%, 46% 0, 58% 5%, 58% 38%, 72% 28%, 84% 33%, 84% 45%, 100% 42%, 100% 57%, 82% 100%);
+}
+
 @media (max-width: 480px) {
   .taskbar {
     height: 44px;
@@ -103,5 +197,15 @@ body {
 
   .system-tray {
     padding: 0 12px;
+  }
+
+  .start-menu {
+    bottom: 52px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .start-menu {
+    transition: none;
   }
 }
