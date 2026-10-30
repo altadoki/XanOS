@@ -1,17 +1,8 @@
 function startDesktopClock() {
   const clock = document.getElementById("clock");
   if (!clock) return;
-
-  const formatter = new Intl.DateTimeFormat(undefined, {
-    hour: "2-digit",
-    minute: "2-digit",
-    hourCycle: "h23"
-  });
-
-  function updateClock() {
-    clock.textContent = formatter.format(new Date());
-  }
-
+  const formatter = new Intl.DateTimeFormat(undefined, {hour:"2-digit",minute:"2-digit",hourCycle:"h23"});
+  function updateClock() { clock.textContent = formatter.format(new Date()); }
   updateClock();
   window.setInterval(updateClock, 1000);
 }
@@ -19,42 +10,35 @@ function startDesktopClock() {
 function startLocalCursor() {
   const cursor = document.getElementById("localCursor");
   if (!cursor) return;
+  let x = 0;
+  let y = 0;
+  let frame = 0;
 
-  let pointerX = 0;
-  let pointerY = 0;
-  let framePending = false;
+  function updateCursor(event) {
+    if (event.pointerType && event.pointerType !== "mouse" && event.pointerType !== "pen") return;
+    x = event.clientX;
+    y = event.clientY;
 
-  function moveCursor(event) {
-    pointerX = event.clientX;
-    pointerY = event.clientY;
-
-    if (!framePending) {
-      framePending = true;
-      window.requestAnimationFrame(() => {
-        cursor.style.transform = `translate3d(${pointerX}px, ${pointerY}px, 0)`;
+    if (!frame) {
+      frame = window.requestAnimationFrame(() => {
+        cursor.style.transform = "translate3d(" + x + "px," + y + "px,0)";
         cursor.classList.add("visible");
-        framePending = false;
+        frame = 0;
       });
     }
 
-    const target = document.elementFromPoint(pointerX, pointerY);
-    let kind = "default";
-
-    if (target && target.closest("input, textarea, [contenteditable='true'], [role='textbox']")) {
-      kind = "text";
-    } else if (target && target.closest("button, a, [role='button'], select, label, summary")) {
-      kind = "pointer";
-    } else if (target && target.closest("[draggable='true']")) {
-      kind = "grab";
-    }
-
-    cursor.dataset.kind = kind;
+    const target = document.elementFromPoint(x, y);
+    const textTarget = target && target.closest("input,textarea,select,[contenteditable]:not([contenteditable='false']),[role='textbox']");
+    const dragTarget = target && target.closest("[draggable='true']");
+    const clickTarget = target && target.closest("button,a,[role='button'],label,summary,.clickable");
+    cursor.dataset.kind = textTarget ? "text" : dragTarget ? "grab" : clickTarget ? "pointer" : "default";
   }
 
-  window.addEventListener("pointermove", moveCursor, { passive: true });
-  window.addEventListener("pointerdown", moveCursor, { passive: true });
-  window.addEventListener("pointerleave", () => cursor.classList.remove("visible"));
-  window.addEventListener("pointerenter", () => cursor.classList.add("visible"));
+  document.addEventListener("pointermove", updateCursor, {passive:true});
+  document.addEventListener("mousemove", updateCursor, {passive:true});
+  document.addEventListener("pointerdown", updateCursor, {passive:true});
+  document.addEventListener("mouseleave", () => cursor.classList.remove("visible"));
+  document.addEventListener("mouseenter", () => cursor.classList.add("visible"));
 }
 
 function startStartMenu() {
@@ -68,14 +52,15 @@ function startStartMenu() {
     button.setAttribute("aria-expanded", String(open));
   }
 
-  button.addEventListener("click", () => {
+  button.addEventListener("click", event => {
+    event.stopPropagation();
     setOpen(!menu.classList.contains("open"));
   });
 
-  document.addEventListener("pointerdown", event => {
-    if (!menu.contains(event.target) && !button.contains(event.target)) {
-      setOpen(false);
-    }
+  menu.addEventListener("click", event => event.stopPropagation());
+
+  document.addEventListener("click", event => {
+    if (!menu.contains(event.target) && !button.contains(event.target)) setOpen(false);
   });
 
   document.addEventListener("keydown", event => {
@@ -90,7 +75,7 @@ function startDesktop() {
 }
 
 if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", startDesktop, { once: true });
+  document.addEventListener("DOMContentLoaded", startDesktop, {once:true});
 } else {
   startDesktop();
 }
